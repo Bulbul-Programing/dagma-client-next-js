@@ -60,7 +60,7 @@ export const Navbar = () => {
         <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
           <NavbarBrand as="li" className="gap-3 max-w-fit">
             <NextLink className="flex justify-start items-center gap-1" href="/">
-              <Image height={60} width={60} alt="Duaria abdul gafur model academy logo" src='https://res.cloudinary.com/depy0i4bl/image/upload/v1738933488/New_Project_plpgem.png' />
+              <Image height={60} width={60} priority={true} alt="Duaria abdul gafur model academy logo" src='https://res.cloudinary.com/depy0i4bl/image/upload/v1738933488/New_Project_plpgem.png' />
               <p className="font-bold text-2xl text-inherit">DAGMA</p>
             </NextLink>
           </NavbarBrand>

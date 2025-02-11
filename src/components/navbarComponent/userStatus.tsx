@@ -135,7 +135,7 @@ const UserStatus = () => {
             ) : ( */}
             <Link
                 className="px-4 py-2 rounded-md bg-blue-500 text-white font-medium"
-                href="/login?redirect=recipeDetails/6740d628394af402d4552fe0"
+                href="/login"
             >
                 Log In
             </Link>
