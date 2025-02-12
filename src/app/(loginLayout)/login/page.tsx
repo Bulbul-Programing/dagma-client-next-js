@@ -2,14 +2,47 @@
 import { Button } from "@heroui/button";
 import Link from "next/link";
 import React, { useState } from "react";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import TTInput from "@/src/components/Form/TTInput";
 import TTForm from "@/src/components/Form/TTForm";
+import { useLoginUserMutation } from "@/src/redux/Users/userManagementApi";
+import { useAppDispatch } from "@/src/redux/hooks";
+import { setUser } from "@/src/redux/features/Auth/authSlice";
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleSubmit = () => {
-    // submit form logic here
+  const [loginUser] = useLoginUserMutation();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const handleSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setLoading(true);
+    try {
+      const res = (await loginUser(data)) as any;
+
+      if (res.data && res.data.success) {
+        toast.success("Logged in successfully");
+        setLoading(false);
+        const token = {
+          accessToken: res?.data?.accessToken,
+          refreshToken: res?.data?.refreshToken,
+        };
+
+        dispatch(setUser(token));
+        router.push("/");
+      }
+      if (res.error) {
+        toast.error(res.error.data.message);
+        setLoading(false);
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "An error occurred");
+      setLoading(false);
+    }
   };
 
   return (

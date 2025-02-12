@@ -44,7 +44,7 @@ const Register = () => {
       data.following = [];
 
       const res = (await signUpUser(data)) as any;
-
+      console.log(res);
       if (res?.data?.success) {
         toast.success("User created successfully");
         const token = {
@@ -54,8 +54,10 @@ const Register = () => {
 
         dispatch(setUser(token));
         router.push("/");
-      } else if (res?.error?.data?.message) {
-        toast.error(res?.error?.data?.message || "An error occurred");
+      } else if (res?.error?.data?.errorSources) {
+        res?.error?.data?.errorSources.map((error: { message: string, path: 'string' }) => (
+          toast.error(res?.error?.data?.message || "An error occurred")
+        ))
       }
       setLoading(false);
     } catch (err: any) {

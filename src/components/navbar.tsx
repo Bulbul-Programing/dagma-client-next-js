@@ -38,7 +38,7 @@ export const Navbar = () => {
 
   return (
     <div
-      className={`sticky top-0 z-10 backdrop-blur transition duration-500 ${
+      className={`sticky top-0 z-10 bg-blue-100 backdrop-blur transition duration-500 ${
         hideNavbar ? "translate-y-[-110px]" : "top-0 translate-y-0"
       }`}
     >
