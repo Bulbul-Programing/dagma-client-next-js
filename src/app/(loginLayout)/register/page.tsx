@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { ChangeEvent, useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
 import TTInput from "@/src/components/Form/TTInput";
 import TTForm from "@/src/components/Form/TTForm";
 import { useRegisterUserMutation } from "@/src/redux/Users/userManagementApi";
@@ -25,6 +25,9 @@ const Register = () => {
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    if (profilePhoto.length < 1) {
+      return toast.error("Please select a profile picture");
+    }
     setLoading(true);
     try {
       let profilePicture;
@@ -39,7 +42,7 @@ const Register = () => {
       data.role = "user";
       data.followers = [];
       data.following = [];
-      
+
       const res = (await signUpUser(data)) as any;
 
       if (res?.data?.success) {
@@ -81,7 +84,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex bg-center bg-no-repeat bg-cover bg-[url('https://res.cloudinary.com/durkh1c9d/image/upload/v1739206550/16332411_rm347-porpla-02-a-01_wtlxmc.jpg')] justify-center items-center min-h-screen">
+    <div className="flex bg-slate-100 justify-center items-center min-h-screen">
       <div className=" w-10/12  md:w-6/12 lg:w-4/12 bg-white backdrop-blur-lg bg-opacity-80 px-4 py-6 rounded-lg">
         <h1 className="text-center text-lg font-semibold">Register</h1>
         <div>
@@ -102,10 +105,7 @@ const Register = () => {
         </div>
         <div>
           {/* <FormProvider {...methods}> */}
-          <TTForm
-            resolver={zodResolver(registerValidationSchema)}
-            onSubmit={onSubmit}
-          >
+          <TTForm resolver={registerValidationSchema} onSubmit={onSubmit}>
             <TTInput label="Name" name="name" type="text" />
             <TTInput label="Email" name="email" type="email" />
             <TTInput label="Password" name="password" type="password" />

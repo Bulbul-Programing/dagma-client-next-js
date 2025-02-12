@@ -1,9 +1,10 @@
 "use client";
 import { ReactNode } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface formConfig {
-  defaultValue?: Record<string, any>;
+  defaultValues?: Record<string, any>;
   resolver?: any;
 }
 
@@ -12,18 +13,12 @@ interface IProps extends formConfig {
   onSubmit: SubmitHandler<any>;
 }
 
-const TTForm = ({ children, onSubmit, defaultValue, resolver }: IProps) => {
-  const formConfig: formConfig = {};
-
-  if (!!defaultValue) {
-    formConfig["defaultValue"] = defaultValue;
-  }
-
-  if (!!resolver) {
-    formConfig["resolver"] = resolver;
-  }
-
-  const methods = useForm(formConfig);
+const TTForm = ({ children, onSubmit, defaultValues, resolver }: IProps) => {
+  const methods = useForm({
+    defaultValues,
+    resolver: resolver ? zodResolver(resolver) : undefined, // Apply Zod resolver
+    mode: "onChange", // ✅ Enable validation onChange
+  });
 
   return (
     <FormProvider {...methods}>

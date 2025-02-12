@@ -1,6 +1,5 @@
 import { baseApi } from "@/src/redux/api/baseApi";
 
-
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     userInfo: builder.query({

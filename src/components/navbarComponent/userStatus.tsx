@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import Image from "next/image";
 
 // import { TDecodedUser } from "@/src/types/decodedUser";
 // import { verifyToken } from "@/src/utils/veryfyToken";
@@ -10,63 +9,64 @@ import Image from "next/image";
 // import { logout, useCurrentToken } from "@/src/redux/features/Auth/authSlice";
 // import { useUserInfoQuery } from "@/src/redux/Users/userManagementApi";
 const UserStatus = () => {
-    const router = useRouter();
-    //   const userToken = useAppSelector(useCurrentToken);
-    //   const dispatch = useAppDispatch();
-    //   const [userInfo, setUserInfo] = useState<TDecodedUser | any>({});
-    const [isOpen, setIsOpen] = useState(false);
-    const [userInfo, setUserInfo] = useState(undefined)
-    //   const { data, isLoading } = useUserInfoQuery(userInfo.email, {
-    //     skip: !userInfo.email,
-    //   });
-    const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  //   const userToken = useAppSelector(useCurrentToken);
+  //   const dispatch = useAppDispatch();
+  //   const [userInfo, setUserInfo] = useState<TDecodedUser | any>({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState(undefined);
+  //   const { data, isLoading } = useUserInfoQuery(userInfo.email, {
+  //     skip: !userInfo.email,
+  //   });
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-    //   useEffect(() => {
-    //     if (userToken) {
-    //       const decodedToken = verifyToken(userToken) as TDecodedUser;
+  //   useEffect(() => {
+  //     if (userToken) {
+  //       const decodedToken = verifyToken(userToken) as TDecodedUser;
 
-    //       if (decodedToken) {
-    //         setUserInfo(decodedToken);
-    //       } else {
-    //         dispatch(logout());
-    //       }
-    //     } else {
-    //       setUserInfo({});
-    //     }
-    //   }, [userToken]);
+  //       if (decodedToken) {
+  //         setUserInfo(decodedToken);
+  //       } else {
+  //         dispatch(logout());
+  //       }
+  //     } else {
+  //       setUserInfo({});
+  //     }
+  //   }, [userToken]);
 
-    const handleLogout = async () => {
-        // dispatch(logout());
+  const handleLogout = async () => {
+    // dispatch(logout());
 
-        toast.success("Logout successful");
+    toast.success("Logout successful");
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Close dropdown if the clicked element is outside of dropdownRef
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
     };
 
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
+    // Bind the event listener to document
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      // Clean up the event listener on component unmount
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            // Close dropdown if the clicked element is outside of dropdownRef
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
-            ) {
-                setIsOpen(false);
-            }
-        };
-
-        // Bind the event listener to document
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            // Clean up the event listener on component unmount
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-    return (
-        <div>
-            {/* {userInfo && userInfo?.email ? (
+  return (
+    <div>
+      {/* {userInfo && userInfo?.email ? (
                 <div ref={dropdownRef} className="relative inline-block text-left">
                     <button className="cursor-pointer" onClick={toggleDropdown}>
                         <Image
@@ -133,15 +133,15 @@ const UserStatus = () => {
                     )}
                 </div>
             ) : ( */}
-            <Link
-                className="px-4 py-2 rounded-md bg-blue-500 text-white font-medium"
-                href="/login"
-            >
-                Log In
-            </Link>
-            {/* )} */}
-        </div>
-    );
+      <Link
+        className="px-4 py-2 rounded-md bg-blue-500 text-white font-medium"
+        href="/login"
+      >
+        Log In
+      </Link>
+      {/* )} */}
+    </div>
+  );
 };
 
 export default UserStatus;

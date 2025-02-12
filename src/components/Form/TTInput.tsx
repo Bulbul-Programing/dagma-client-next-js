@@ -21,7 +21,16 @@ const TTInput = ({
   const {
     register,
     formState: { errors },
+    setValue, // ✅ Allows manual value setting for instant validation
+    trigger, // ✅ Triggers validation when input changes
   } = useFormContext();
+
+  // Custom onChange handler to validate field dynamically
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(name, e.target.value, { shouldValidate: true });
+    trigger(name); // ✅ Trigger validation on change
+    if (onChange) onChange();
+  };
 
   return (
     <Input
@@ -29,7 +38,7 @@ const TTInput = ({
       className="my-3"
       defaultValue={defaultValue}
       disabled={disabled}
-      errorMessage={errors[name] ? (errors[name].message as string) : ""}
+      errorMessage={errors[name]?.message as string}
       isInvalid={!!errors[name]}
       label={label}
       name={name}
@@ -37,7 +46,7 @@ const TTInput = ({
       size={size}
       type={type}
       variant={variant}
-      onChange={onChange}
+      onChange={handleChange} // ✅ Custom handler for live validation
     />
   );
 };
